@@ -1,10 +1,10 @@
 package com.example.iisjava;
 
 public class MonteCarloIntegral {
-    private double[][] _randomValues;
+    private double _randomValues[][];
     private CurrentCalculator _currentCalculator;
     private int _testCount;
-    MonteCarloIntegral(double[][] randomValues, int N) {
+    MonteCarloIntegral(double randomValues[][], int N) {
         this._randomValues = randomValues;
         this._currentCalculator = new CurrentCalculator();
         this._testCount = N;
@@ -17,7 +17,7 @@ public class MonteCarloIntegral {
         double result = 0.0;
         double V = (b[0] - a[0]) * (b[1] - a[1]);
         double X[] = { 0.0, 0.0 };
-        Boolean flag = true;
+        boolean flag;
 
         for (int i = 0; i < _testCount; i++)
         {

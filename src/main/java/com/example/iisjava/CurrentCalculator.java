@@ -8,7 +8,7 @@ public class CurrentCalculator {
     public double calculateJ(double x, double y, double z, double u) {
         double currentZ = calculateZ(x, y, z);
         double s1 = 3 / (K * PHI);
-        double s2 = currentZ * (1 - (23 / (((3 * PHI * K * z) + 10) - (2 * u * K * currentZ)))) + s1;
+        double s2 = currentZ * (1 - (23 / (((3 * PHI * K * currentZ) + 10) - (2 * u * K * currentZ)))) + s1;
         double j = 1620 * u * EF * Math.exp(-1.025 * currentZ * Math.sqrt(calculateAvgPhi(currentZ, s1, s2, u)));
         return j;
     }
