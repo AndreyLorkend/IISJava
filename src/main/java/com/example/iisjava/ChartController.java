@@ -24,7 +24,9 @@ public class ChartController implements Initializable {
     private Canvas graph;
     @FXML
     void onDrawProfile(ActionEvent event) {
-        this.drawer.drawProfile(this.zNumberInput.getValue(), 0.01);
+        this.drawer.setParams(this.zNumberInput.getValue(), 0.01);
+        Thread drawThread = new Thread(this.drawer);
+        drawThread.start();
     }
     @FXML
     void onDrawGraph(ActionEvent event) {

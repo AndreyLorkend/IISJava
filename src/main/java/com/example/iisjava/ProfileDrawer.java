@@ -9,17 +9,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProfileDrawer {
+public class ProfileDrawer implements Runnable {
     private ArrayList<Point> _researchArea = new ArrayList<Point>();
 
     private MonteCarloIntegral integral;
-    private final int N = 1000;
+    private final int N = 10000;
     private final int SEED = 65539;
     private final double MAX_RANDOM = 32767.0;
     private RandomGenerator randomGenerator = new RandomGenerator(SEED);
     private Canvas canvas;
     private GraphicsContext ctx;
-
+    private double z0 = 5;
+    private double u0 = 0.01;
     private double[][] randomValues;
 
     ProfileDrawer(Canvas canvas) {
@@ -148,6 +149,7 @@ public class ProfileDrawer {
         for (int i = 0; i < 10; i++) {
             j0 += this.calculateNewJ(0, Z0, U0) / 10.0;
         }
+
         this.ctx.fillOval(diagram.get(0).getX() * 11 + 5, 280 - diagram.get(0).getY() * 11, 1, 1);
         for (int i = 1; i < 450; i++) {
             diagram.get(i).setX(diagram.get(i-1).getX() + step);
@@ -188,11 +190,19 @@ public class ProfileDrawer {
             this.ctx.fillOval(diagram.get(i).getX() * 11 + 5, 280 - diagram.get(i).getY() * 11, 1, 1);
         }
     }
-
     public void drawResearchArea() {
         this._researchArea.forEach((Point point) -> {
             this.ctx.lineTo(point.getX() * 11 + 5, 280 - point.getY() * 11);
             this.ctx.stroke();
         });
+    }
+    @Override
+    public void run() {
+        this.drawProfile(this.z0, this.u0);
+        Thread.currentThread().interrupt();
+    }
+    public void setParams(double Z0, double U0) {
+        this.z0 = Z0;
+        this.u0 = U0;
     }
 }
