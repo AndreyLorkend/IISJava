@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ProfileDrawer implements Runnable {
@@ -33,19 +34,19 @@ public class ProfileDrawer implements Runnable {
     private void initCoordinates() {
         this._researchArea.add(new Point(0.0, 0.0));
         this._researchArea.add(new Point(10.0, 0.0));
-        this._researchArea.add(new Point(10.0, 5.0));
-        this._researchArea.add(new Point(26.0, 5.0));
+        this._researchArea.add(new Point(10.0, 10.0));
+        this._researchArea.add(new Point(26.0, 10.0));
         this._researchArea.add(new Point(30.0, 0.0));
         this._researchArea.add(new Point(33.0, 0.0));
-        this._researchArea.add(new Point(33.0, 10.0));
-        this._researchArea.add(new Point(43.0, 10.0));
+        this._researchArea.add(new Point(33.0, 5.0));
+        this._researchArea.add(new Point(43.0, 5.0));
     }
 
     private void initCalculationParams() {
         this.randomValues = new double[N][2];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < 2; j++) {
-                this.randomValues[i][j] = (double)this.randomGenerator.next() / this.MAX_RANDOM;
+                this.randomValues[i][j] = (double)Math.random();
             }
         }
         this.integral = new MonteCarloIntegral(this.randomValues, N);
@@ -141,7 +142,7 @@ public class ProfileDrawer implements Runnable {
         double z[] = {0.0, 0.0, 0.0};
         double j[] = {0.0, 0.0, 0.0};
         ArrayList<Point> diagram = new ArrayList<Point>();
-        for(int i = 0; i < 400; i++) {
+        for(int i = 0; i < 450; i++) {
             diagram.add(new Point(0, 0));
         }
 
@@ -151,9 +152,10 @@ public class ProfileDrawer implements Runnable {
         for (int i = 0; i < 10; i++) {
             j0 += this.calculateNewJ(0, Z0, U0) / 10.0;
         }
-
-        this.ctx.fillOval(diagram.get(0).getX() * 11 + 5, 280 - diagram.get(0).getY() * 11, 1, 1);
-        for (int i = 1; i < 400; i++) {
+        this.ctx.moveTo(diagram.get(0).getX() * 11 + 5, 280 - diagram.get(0).getY() * 11);
+        this.ctx.lineTo(diagram.get(0).getX() * 11 + 5, 280 - diagram.get(0).getY() * 11);
+        this.ctx.stroke();
+        for (int i = 1; i < 450; i++) {
             diagram.get(i).setX(diagram.get(i-1).getX() + step);
             z[2] = diagram.get(i-1).getY();
             j[1] = this.calculateNewJ(diagram.get(i).getX(), z[2], U0);
@@ -189,7 +191,8 @@ public class ProfileDrawer implements Runnable {
                 diagram.get(i).setY(z[2]);
             }
 
-            this.ctx.fillOval(diagram.get(i).getX() * 11 + 5, 280 - diagram.get(i).getY() * 11, 1, 1);
+            this.ctx.lineTo(diagram.get(i).getX() * 11 + 5, 280 - diagram.get(i).getY() * 11);
+            this.ctx.stroke();
         }
     }
     public void drawResearchArea() {
@@ -197,6 +200,7 @@ public class ProfileDrawer implements Runnable {
             this.ctx.lineTo(point.getX() * 11 + 5, 280 - point.getY() * 11);
             this.ctx.stroke();
         });
+        this.ctx.moveTo(this._researchArea.get(0).getX() * 11 + 5, 280 - this._researchArea.get(0).getY() * 11);
     }
     @Override
     public void run() {
