@@ -21,10 +21,12 @@ public class ChartController implements Initializable {
     @FXML
     private Spinner<Double> zNumberInput;
     @FXML
+    private Spinner<Double> uNumberInput;
+    @FXML
     private Canvas graph;
     @FXML
     void onDrawProfile(ActionEvent event) {
-        this.drawer.setParams(this.zNumberInput.getValue(), 0.01);
+        this.drawer.setParams(this.zNumberInput.getValue(), this.uNumberInput.getValue());
         Thread drawThread = new Thread(this.drawer);
         drawThread.start();
     }
@@ -38,7 +40,10 @@ public class ChartController implements Initializable {
         this.drawer = new ProfileDrawer(this.graph);
         this.drawer.drawResearchArea();
         SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(5.0, 20.0);
+        SpinnerValueFactory<Double> uValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.001, 1);
+        uValueFactory.setValue(0.01);
         valueFactory.setValue(5.0);
         zNumberInput.setValueFactory(valueFactory);
+        uNumberInput.setValueFactory(uValueFactory);
     }
 }
