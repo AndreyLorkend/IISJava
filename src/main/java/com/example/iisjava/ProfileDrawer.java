@@ -32,13 +32,13 @@ public class ProfileDrawer implements Runnable {
 
     private void initCoordinates() {
         this._researchArea.add(new Point(0.0, 0.0));
-        this._researchArea.add(new Point(10.0, 0.0));
-        this._researchArea.add(new Point(14.0, 4.0));
-        this._researchArea.add(new Point(25.0, 4.0));
-        this._researchArea.add(new Point(25.0, 0.0));
-        this._researchArea.add(new Point(32.0, 0.0));
-        this._researchArea.add(new Point(38.0, 8.0));
-        this._researchArea.add(new Point(48.0, 8.0));
+        this._researchArea.add(new Point(20.0, 0.0));
+        this._researchArea.add(new Point(20.0, 10.0));
+        this._researchArea.add(new Point(46.0, 10.0));
+        this._researchArea.add(new Point(50.0, 0.0));
+        this._researchArea.add(new Point(53.0, 0.0));
+        this._researchArea.add(new Point(53.0, 5.0));
+        this._researchArea.add(new Point(60.0, 5.0));
     }
 
     private void initCalculationParams() {
@@ -74,12 +74,13 @@ public class ProfileDrawer implements Runnable {
             j += this.integral.calculateIntegral(xL, xH, yL, yH, Z, U);
         }
 
-        if (visiblePoints[1] && (zp > (xp - this._researchArea.get(1).getX()))) {
-            Z = (zp - (xp - this._researchArea.get(1).getX())) * Math.cos(Math.PI / 4);
-            xL = (this._researchArea.get(1).getX() - (xp + Z * Math.cos(Math.PI / 4))) / Math.cos(Math.PI / 4);
+        if (visiblePoints[1] && (xp < this._researchArea.get(1).getX()))
+        {
+            xL = this._researchArea.get(1).getY() - zp;
             if (xL > MAX) xL = MAX;
-            xH = (this._researchArea.get(2).getX() - (xp + Z * Math.cos(Math.PI / 4))) / Math.cos(Math.PI / 4);
+            xH = this._researchArea.get(2).getY() - zp;
             if (xH > MAX) xH = MAX;
+            Z = this._researchArea.get(1).getX() - xp;
             j += integral.calculateIntegral(xL, xH, yL, yH, Z, U);
         }
 
@@ -92,12 +93,12 @@ public class ProfileDrawer implements Runnable {
             j += integral.calculateIntegral(xL, xH, yL, yH, Z, U);
         }
 
-        if (visiblePoints[3] && (xp > this._researchArea.get(3).getX())) {
-            xL = this._researchArea.get(3).getY() - zp;
+        if (visiblePoints[3] && (zp > this._researchArea.get(3).getX() - xp)) {
+            Z = (zp - (this._researchArea.get(3).getX() - xp)) * Math.cos(Math.PI / 4);
+            xL = (this._researchArea.get(4).getX() - (xp - Z * Math.cos(Math.PI / 4))) / Math.cos(Math.PI / 4);
             if (xL > MAX) xL = MAX;
-            xH = this._researchArea.get(4).getY() - zp;
+            xH = (this._researchArea.get(3).getX() - (xp - Z * Math.cos(Math.PI / 4))) / Math.cos(Math.PI / 4);
             if (xH > MAX) xH = MAX;
-            Z = this._researchArea.get(3).getX() - xp;
             j += integral.calculateIntegral(xL, xH, yL, yH, Z, U);
         }
 
@@ -110,12 +111,12 @@ public class ProfileDrawer implements Runnable {
             j += integral.calculateIntegral(xL, xH, yL, yH, Z, U);
         }
 
-        if (visiblePoints[5] && (zp > (xp - this._researchArea.get(5).getX()))) {
-            Z = (zp - (xp - this._researchArea.get(5).getX())) * Math.cos(Math.PI / 4);
-            xL = (this._researchArea.get(5).getX() - (xp + Z * Math.cos(Math.PI / 4))) / Math.cos(Math.PI / 4);
+        if (visiblePoints[5] && (xp < this._researchArea.get(5).getX())) {
+            xL = this._researchArea.get(5).getY() - zp;
             if (xL > MAX) xL = MAX;
-            xH = (this._researchArea.get(6).getX() - (xp + Z * Math.cos(Math.PI / 4))) / Math.cos(Math.PI / 4);
+            xH = this._researchArea.get(6).getY() - zp;
             if (xH > MAX) xH = MAX;
+            Z = this._researchArea.get(5).getX() - xp;
             j += integral.calculateIntegral(xL, xH, yL, yH, Z, U);
         }
 
@@ -139,7 +140,7 @@ public class ProfileDrawer implements Runnable {
         double z[] = {0.0, 0.0, 0.0};
         double j[] = {0.0, 0.0, 0.0};
         ArrayList<Point> diagram = new ArrayList<Point>();
-        for(int i = 0; i < 450; i++) {
+        for(int i = 0; i < 650; i++) {
             diagram.add(new Point(0, 0));
         }
 
@@ -151,7 +152,7 @@ public class ProfileDrawer implements Runnable {
         }
 
         this.ctx.fillOval(diagram.get(0).getX() * 11 + 5, 280 - diagram.get(0).getY() * 11, 1, 1);
-        for (int i = 1; i < 450; i++) {
+        for (int i = 1; i < 650; i++) {
             diagram.get(i).setX(diagram.get(i-1).getX() + step);
             z[2] = diagram.get(i-1).getY();
             j[1] = this.calculateNewJ(diagram.get(i).getX(), z[2], U0);
